@@ -2,9 +2,9 @@ import socket
 import threading
 import time
 
-SERVER_IP = '0.0.0.0'  # Ganti kalau servernya di IP lain
+SERVER_IP = '0.0.0.0'  
 PORT = 45000
-NUM_CLIENTS = 5  # Ubah sesuai kebutuhan
+NUM_CLIENTS = 5 
 
 def client_thread(id):
 	try:
@@ -19,7 +19,6 @@ def client_thread(id):
 
         	# 2. Kirim command yang TIDAK valid
         	s.sendall(b"HELLO\r\n")
-        	# Coba tunggu respon (kalau server memang ignore, bakal timeout atau ga ada respon)
         	s.settimeout(1.0)
         	try:
             	response = s.recv(1024)
