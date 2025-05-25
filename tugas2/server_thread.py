@@ -21,23 +21,23 @@ class ProcessTheClient(threading.Thread):
                 	break
             	logging.warning(f"[{self.address}] Messages: {data!r}")
             	buffer += data
-            	while CRLF in buffer:
-                	line, buffer = buffer.split(CRLF, 1)
-                	line_str = line.decode('utf-8', errors='ignore').strip()
+while CRLF in buffer:
+	line, buffer = buffer.split(CRLF, 1)
+	line_str = line.decode('utf-8', errors='ignore').strip()
 
-                	if line_str.upper().startswith("TIME"):
-                    	now = datetime.now()
-                    	jam = now.strftime("%H:%M:%S")
-                    	response = f"JAM {jam}\r\n"
-                    	logging.warning(f"[{self.address}] Sending: {response.strip()}")
-                    	self.connection.sendall(response.encode('utf-8'))
+	if line_str.upper().startswith("TIME"):
+		now = datetime.now()
+		jam = now.strftime("%H:%M:%S")
+		response = f"JAM {jam}\r\n"
+		logging.warning(f"[{self.address}] Sending: {response.strip()}")
+		self.connection.sendall(response.encode('utf-8'))
 
-                	elif line_str.upper() == "QUIT":
-                    	logging.warning(f"[{self.address}] Received QUIT. Closing connection.")
-                    	self.running = False
-                    	break
-                	else:
-                    	logging.warning(f"[{self.address}] Unknown command: {line_str!r}")
+	elif line_str.upper() == "QUIT":
+		logging.warning(f"[{self.address}] Received QUIT. Closing connection.")
+		self.running = False
+		break
+	else:
+		logging.warning(f"[{self.address}] Unknown command: {line_str!r}")
     	except Exception as e:
         	logging.warning(f"Exception from {self.address}: {e}")
     	finally:
