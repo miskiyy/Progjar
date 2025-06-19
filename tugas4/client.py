@@ -1,6 +1,6 @@
 import socket
 
-def send_request(request, host='localhost', port=8889):
+def send_request(request, host='localhost', port=8890):  # <- fix di sini
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
     s.sendall(request.encode())
@@ -14,18 +14,18 @@ def send_request(request, host='localhost', port=8889):
     return response.decode(errors='ignore')
 
 
-def list_files():
+def list_files(host='localhost', port=8890): 
     req = "GET /list HTTP/1.0\r\n\r\n"
-    resp = send_request(req)
+    resp = send_request(req, host, port)
     print("=== LIST FILES ===")
     print(resp)
 
 
-def upload_file(filename, host='localhost', port=8889):
+def upload_file(filename, host='localhost', port=8890):
     try:
-        with open(filename, 'r') as f:  # baca sebagai text, bukan binary
+        with open(filename, 'r') as f: 
             filedata = f.read()
-        body = f"{filename}\n{filedata}"
+        body = f"{filename}\n{filedata}\r\n"  
         req = f"POST /upload HTTP/1.0\r\nContent-Length: {len(body)}\r\n\r\n{body}"
         resp = send_request(req, host, port)
         print("=== UPLOAD FILE ===")
@@ -35,7 +35,7 @@ def upload_file(filename, host='localhost', port=8889):
 
 
 def delete_file(filename, host='localhost', port=8890):
-    body = filename + "\r\n"  # <- ini kuncinyaaa
+    body = filename + "\r\n"
     headers = (
         f"POST /delete HTTP/1.0\r\n"
         f"Content-Length: {len(body)}\r\n"
